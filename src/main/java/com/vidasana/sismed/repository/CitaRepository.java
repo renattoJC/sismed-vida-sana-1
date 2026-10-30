@@ -10,4 +10,6 @@ public interface CitaRepository extends JpaRepository<Cita, Long> {
     List<Cita> findAllByOrderByFechaHoraAsc();
 
     List<Cita> findByEstadoOrderByFechaHoraAsc(String estado);
+
+    List<Cita> findTop5ByOrderByFechaRegistroDesc();
 }

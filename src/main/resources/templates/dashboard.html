@@ -113,6 +113,115 @@
             color: #166534;
         }
 
+        .dashboard-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .detail-panel {
+            min-width: 0;
+            background: white;
+            border-radius: 12px;
+            padding: 23px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, .08);
+        }
+
+        .detail-panel h2 {
+            color: #1f2937;
+            font-size: 19px;
+            margin-bottom: 6px;
+        }
+
+        .panel-description {
+            color: #6b7280;
+            font-size: 13px;
+            margin-bottom: 18px;
+        }
+
+        .activity-list {
+            display: grid;
+            gap: 0;
+        }
+
+        .activity-item {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 12px;
+            align-items: center;
+            padding: 14px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .activity-item:last-child {
+            border-bottom: 0;
+        }
+
+        .activity-type {
+            display: block;
+            color: #0f766e;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .activity-description {
+            color: #374151;
+            font-size: 14px;
+        }
+
+        .activity-date {
+            color: #6b7280;
+            font-size: 12px;
+            text-align: right;
+            white-space: nowrap;
+        }
+
+        .empty-state {
+            color: #6b7280;
+            font-size: 14px;
+            padding: 16px 0;
+        }
+
+        .revenue-list {
+            display: grid;
+            gap: 14px;
+        }
+
+        .revenue-item {
+            display: grid;
+            grid-template-columns: 68px minmax(50px, 1fr) 100px;
+            gap: 12px;
+            align-items: center;
+            color: #374151;
+            font-size: 13px;
+        }
+
+        .revenue-label {
+            text-transform: capitalize;
+        }
+
+        .revenue-track {
+            height: 12px;
+            overflow: hidden;
+            border-radius: 999px;
+            background: #e5e7eb;
+        }
+
+        .revenue-bar {
+            height: 100%;
+            min-width: 0;
+            border-radius: inherit;
+            background: linear-gradient(90deg, #0f766e, #14b8a6);
+        }
+
+        .revenue-value {
+            text-align: right;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
         .modules {
             background: white;
 
@@ -192,6 +301,27 @@
             cursor: pointer;
 
             font-weight: bold;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px 14px;
+            }
+
+            .activity-item {
+                grid-template-columns: 1fr;
+                gap: 5px;
+            }
+
+            .activity-date {
+                text-align: left;
+            }
+
+            .revenue-item {
+                grid-template-columns: 58px minmax(35px, 1fr) 85px;
+                gap: 8px;
+                font-size: 12px;
+            }
         }
     </style>
 
@@ -305,6 +435,20 @@
 
             </div>
 
+            <div class="card">
+
+                <h3>
+                    ATENCIONES DE ESTE MES
+                </h3>
+
+                <div class="number" th:text="${atencionesDelMes}">
+
+                    0
+
+                </div>
+
+            </div>
+
 
             <div class="card">
 
@@ -322,6 +466,65 @@
                 </div>
 
             </div>
+
+        </section>
+
+        <section class="dashboard-details">
+
+            <article class="detail-panel">
+
+                <h2>Actividad reciente</h2>
+                <p class="panel-description">
+                    Últimos pacientes registrados y citas creadas.
+                </p>
+
+                <div class="activity-list" th:if="${!#lists.isEmpty(actividadReciente)}">
+                    <div class="activity-item" th:each="actividad : ${actividadReciente}">
+                        <div>
+                            <span class="activity-type" th:text="${actividad.tipo}">Actividad</span>
+                            <span class="activity-description" th:text="${actividad.descripcion}">
+                                Detalle de la actividad
+                            </span>
+                        </div>
+                        <time class="activity-date"
+                              th:text="${#temporals.format(actividad.fecha, 'dd/MM/yyyy HH:mm')}">
+                            01/01/2026 10:00
+                        </time>
+                    </div>
+                </div>
+
+                <p class="empty-state" th:if="${#lists.isEmpty(actividadReciente)}">
+                    Aún no hay registros de pacientes ni citas.
+                </p>
+
+            </article>
+
+            <article class="detail-panel">
+
+                <h2>Ingresos por mes</h2>
+                <p class="panel-description">
+                    Recaudación de los últimos seis meses, considerando pagos realizados.
+                </p>
+
+                <div class="revenue-list">
+                    <div class="revenue-item" th:each="ingreso : ${ingresosMensuales}">
+                        <span class="revenue-label" th:text="${ingreso.etiqueta}">Mes</span>
+                        <div class="revenue-track"
+                             role="progressbar"
+                             th:attr="aria-label=${'Ingresos ' + ingreso.etiqueta},
+                                      aria-valuenow=${ingreso.porcentaje},
+                                      aria-valuemin=0,
+                                      aria-valuemax=100">
+                            <div class="revenue-bar"
+                                 th:style="'width: ' + ${ingreso.porcentaje} + '%'"></div>
+                        </div>
+                        <span class="revenue-value">
+                            S/ <span th:text="${#numbers.formatDecimal(ingreso.total, 1, 2)}">0.00</span>
+                        </span>
+                    </div>
+                </div>
+
+            </article>
 
         </section>
 

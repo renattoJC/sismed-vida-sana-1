@@ -104,6 +104,22 @@
             border-radius: 7px;
 
             font-weight: bold;
+            font-weight: bold;
+        }
+        }
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        .actions a {
+            margin-top: 0;
+        }
+
+        .export {
+            background: #166534;
         }
 
     </style>
@@ -222,13 +238,25 @@
     </div>
 
 
-    <a
-            href="/dashboard"
-            class="back">
+    <div class="actions">
 
-        ← Volver al Dashboard
+        <a
+                href="/reportes/exportar-excel"
+                class="back export">
 
-    </a>
+            Descargar reporte Excel
+
+        </a>
+
+        <a
+                href="/dashboard"
+                class="back">
+
+            ← Volver al Dashboard
+
+        </a>
+
+    </div>
 
 </div>
 
