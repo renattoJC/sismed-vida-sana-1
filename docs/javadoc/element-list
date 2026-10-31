@@ -1,0 +1,6 @@
+com.vidasana.sismed
+com.vidasana.sismed.config
+com.vidasana.sismed.controller
+com.vidasana.sismed.entity
+com.vidasana.sismed.repository
+com.vidasana.sismed.service
